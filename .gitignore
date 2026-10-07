@@ -1,0 +1,19 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+/client/dist
+/client/.angular
+/server/dist
+
+# Environment files (secrets)
+.env
+.env.*
+
+# IDE
+.DS_Store
+.idea/
+.vscode/
+
+# Local JSON storage database
+server/db.json

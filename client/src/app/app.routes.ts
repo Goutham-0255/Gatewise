@@ -28,7 +28,15 @@ export const routes: Routes = [
   {
     path: 'admin',
     canActivate: [authGuard, adminGuard],
-    loadComponent: () => import('./features/admin/admin.component').then((m) => m.AdminComponent),
+    loadComponent: loadShell,
+    children: [
+      { path: '', redirectTo: 'users', pathMatch: 'full' },
+      {
+        path: 'users',
+        loadComponent: () =>
+          import('./features/admin/user-list.component').then((m) => m.UserListComponent),
+      },
+    ],
   },
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
   { path: '**', redirectTo: 'dashboard' },

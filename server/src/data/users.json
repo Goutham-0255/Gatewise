@@ -1,0 +1,26 @@
+[
+  {
+    "id": "u1",
+    "username": "admin",
+    "passwordHash": "$2b$10$2OpFMmcm1.YRvnOFWPgIkeD9AR5/dRWuZchjDBHLkb9EgRtN.4nVm",
+    "role": "Admin",
+    "email": "admin@gatewise.dev",
+    "createdAt": "2026-10-09T12:14:54.263Z"
+  },
+  {
+    "id": "u2",
+    "username": "john_doe",
+    "passwordHash": "$2b$10$2OpFMmcm1.YRvnOFWPgIkeD9AR5/dRWuZchjDBHLkb9EgRtN.4nVm",
+    "role": "General User",
+    "email": "john@gatewise.dev",
+    "createdAt": "2026-10-09T12:14:54.263Z"
+  },
+  {
+    "id": "u3",
+    "username": "jane_doe",
+    "passwordHash": "$2b$10$2OpFMmcm1.YRvnOFWPgIkeD9AR5/dRWuZchjDBHLkb9EgRtN.4nVm",
+    "role": "General User",
+    "email": "jane@gatewise.dev",
+    "createdAt": "2026-10-09T12:14:54.263Z"
+  }
+]

@@ -7,7 +7,8 @@ import recordsRoutes from './routes/records.routes';
 import { authenticate } from './middleware/auth.middleware';
 
 const app = express();
-app.use(cors({ origin: ['http://localhost:4200'] }));
+// An array (not a string) makes cors omit the allow-origin header for unknown origins
+app.use(cors({ origin: env.clientOrigins }));
 app.use(express.json());
 
 app.use('/api/auth', authRoutes);

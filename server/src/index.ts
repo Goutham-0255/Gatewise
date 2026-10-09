@@ -7,7 +7,7 @@ import recordsRoutes from './routes/records.routes';
 import { authenticate } from './middleware/auth.middleware';
 
 const app = express();
-app.use(cors({ origin: 'http://localhost:4200' }));
+app.use(cors({ origin: ['http://localhost:4200'] }));
 app.use(express.json());
 
 app.use('/api/auth', authRoutes);

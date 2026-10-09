@@ -1,0 +1,50 @@
+[
+  {
+    "id": "r1",
+    "userId": "u2",
+    "title": "John report Q1",
+    "description": "John report Q1 details",
+    "status": "active",
+    "createdAt": "2026-10-09T12:14:54.263Z"
+  },
+  {
+    "id": "r2",
+    "userId": "u2",
+    "title": "John audit",
+    "description": "John audit details",
+    "status": "inactive",
+    "createdAt": "2026-10-09T12:14:54.263Z"
+  },
+  {
+    "id": "r3",
+    "userId": "u3",
+    "title": "Jane roadmap",
+    "description": "Jane roadmap details",
+    "status": "active",
+    "createdAt": "2026-10-09T12:14:54.263Z"
+  },
+  {
+    "id": "r4",
+    "userId": "u3",
+    "title": "Jane review",
+    "description": "Jane review details",
+    "status": "active",
+    "createdAt": "2026-10-09T12:14:54.263Z"
+  },
+  {
+    "id": "r5",
+    "userId": "u1",
+    "title": "Admin policy",
+    "description": "Admin policy details",
+    "status": "active",
+    "createdAt": "2026-10-09T12:14:54.263Z"
+  },
+  {
+    "id": "r6",
+    "userId": "u1",
+    "title": "Admin backup",
+    "description": "Admin backup details",
+    "status": "inactive",
+    "createdAt": "2026-10-09T12:14:54.263Z"
+  }
+]

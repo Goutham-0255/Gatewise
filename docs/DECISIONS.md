@@ -31,3 +31,9 @@
 ## ADR-008: Configuration via Environment Variables
 **Decision**: Secrets and settings (JWT secret, port, storage driver, AWS config) come from environment variables; only `.env.example` is committed.  
 **Reason**: No secrets in Git, and the same build runs in any environment.
+
+## ADR-009: Token Storage in localStorage
+**Decision**: The client stores the JWT in `localStorage` (`gatewise_token`) and sends it as an `Authorization: Bearer` header through an HTTP interceptor.  
+**Reason**: Simple for a SPA talking to a separate API: no cookies, so no CSRF tokens or same-site cookie setup.  
+**Tradeoff**: Any XSS could read the token. We limit that with Angular's built-in template escaping, no `innerHTML`, a 1-hour token lifetime, and server-side authorization on every route. httpOnly cookies would be stronger but need CSRF protection and same-site configuration.  
+The login form deliberately has no role selector: the server derives the role from the stored user and ignores any role sent in the request.

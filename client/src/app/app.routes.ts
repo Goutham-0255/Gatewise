@@ -3,6 +3,9 @@ import { adminGuard } from './core/guards/admin.guard';
 import { authGuard } from './core/guards/auth.guard';
 import { guestGuard } from './core/guards/guest.guard';
 
+const loadShell = () =>
+  import('./features/dashboard/dashboard-shell.component').then((m) => m.DashboardShellComponent);
+
 export const routes: Routes = [
   {
     path: 'login',
@@ -12,8 +15,15 @@ export const routes: Routes = [
   {
     path: 'dashboard',
     canActivate: [authGuard],
-    loadComponent: () =>
-      import('./features/dashboard/dashboard.component').then((m) => m.DashboardComponent),
+    loadComponent: loadShell,
+    children: [
+      { path: '', redirectTo: 'records', pathMatch: 'full' },
+      {
+        path: 'records',
+        loadComponent: () =>
+          import('./features/dashboard/records-table.component').then((m) => m.RecordsTableComponent),
+      },
+    ],
   },
   {
     path: 'admin',

@@ -1,25 +1,36 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { AsyncPipe, DatePipe } from '@angular/common';
-import { Observable, Subject, catchError, map, of, startWith, switchMap } from 'rxjs';
-import { RecordItem } from '../../core/models/record.model';
+import { BehaviorSubject, Observable, Subject, merge, map, tap } from 'rxjs';
 import { AuthService } from '../../core/services/auth.service';
 import { RecordsService } from '../../core/services/records.service';
 import { SkeletonLoaderComponent } from '../../shared/components/skeleton-loader.component';
-
-type RecordsState =
-  | { status: 'loading' }
-  | { status: 'error' }
-  | { status: 'ready'; records: RecordItem[] };
+import { DelayPickerComponent } from './delay-picker.component';
+import { RecordsState, createRecordsStream } from './records-stream';
 
 @Component({
   selector: 'app-records-table',
   standalone: true,
-  imports: [AsyncPipe, DatePipe, SkeletonLoaderComponent],
+  imports: [AsyncPipe, DatePipe, DelayPickerComponent, SkeletonLoaderComponent],
   template: `
     <div class="mb-6">
       <h1 class="text-2xl font-semibold text-gray-900">Records</h1>
       <p class="text-sm text-gray-500">
         {{ (isAdmin$ | async) ? 'All records across every user' : 'Your records' }}
+      </p>
+    </div>
+
+    <div class="mb-6 grid gap-3 md:grid-cols-[minmax(0,28rem)_auto] md:items-center">
+      <app-delay-picker [value]="delay$.value" (delayChange)="delay$.next($event)" />
+      <p class="text-sm text-gray-600" aria-live="polite">
+        @switch (lastResponse()) {
+          @case (null) {}
+          @case ('failed') {
+            <span class="text-red-600">Failed</span>
+          }
+          @default {
+            API responded in <span class="font-mono font-medium text-gray-900">{{ lastResponse() }} ms</span>
+          }
+        }
       </p>
     </div>
 
@@ -98,20 +109,24 @@ export class RecordsTableComponent {
   private readonly records = inject(RecordsService);
   readonly isAdmin$ = inject(AuthService).isAdmin$;
 
-  private readonly reload$ = new Subject<void>();
+  readonly delay$ = new BehaviorSubject(0);
+  private readonly retry$ = new Subject<void>();
 
-  readonly state$: Observable<RecordsState> = this.reload$.pipe(
-    startWith(undefined),
-    switchMap(() =>
-      this.records.getRecords().pipe(
-        map((records): RecordsState => ({ status: 'ready', records })),
-        catchError(() => of<RecordsState>({ status: 'error' })),
-        startWith<RecordsState>({ status: 'loading' }),
-      ),
-    ),
+  /** Milliseconds of the latest successful request, 'failed' after an error, null before any result. */
+  readonly lastResponse = signal<number | 'failed' | null>(null);
+
+  readonly state$: Observable<RecordsState> = createRecordsStream(
+    // A delay change or Retry both refetch with the current delay
+    merge(this.delay$, this.retry$.pipe(map(() => this.delay$.value))),
+    (delay) => this.records.getRecords(delay),
+  ).pipe(
+    tap((state) => {
+      if (state.status === 'ready') this.lastResponse.set(state.elapsedMs);
+      if (state.status === 'error') this.lastResponse.set('failed');
+    }),
   );
 
   reload(): void {
-    this.reload$.next();
+    this.retry$.next();
   }
 }

@@ -4,7 +4,11 @@ import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
 import { jwtInterceptor } from './core/interceptors/jwt.interceptor';
+import { loadingInterceptor } from './core/interceptors/loading.interceptor';
 
 export const appConfig: ApplicationConfig = {
-  providers: [provideRouter(routes), provideHttpClient(withInterceptors([jwtInterceptor]))],
+  providers: [
+    provideRouter(routes),
+    provideHttpClient(withInterceptors([loadingInterceptor, jwtInterceptor])),
+  ],
 };

@@ -5,13 +5,19 @@ node_modules/
 /client/dist
 /client/.angular
 /server/dist
+coverage/
 
 # Environment files (secrets)
 .env
 .env.*
+!.env.example
 
-# IDE
+# Logs
+*.log
+
+# IDE / OS
 .DS_Store
+Thumbs.db
 .idea/
 .vscode/
 

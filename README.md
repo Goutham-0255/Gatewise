@@ -1,9 +1,8 @@
-# Gatewise — MPloyChek Verification Portal
+# Gatewise
 
-A production-grade Role-Based Access Control (RBAC) portal built for NSQTech evaluation.
-
+A production-grade Role-Based Access Control (RBAC) portal.
 ## Stack
-- **Frontend**: Angular 16+ SPA (`client/`)
+- **Frontend**: Angular 16+  (`client/`)
 - **Backend**: Node.js + Express + TypeScript REST API (`server/`)
 - **Auth**: JWT with role-based access (`General User` / `Admin`)
 - **Storage**: Pluggable — local JSON fallback + DynamoDB adapter

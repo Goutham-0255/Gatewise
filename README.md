@@ -233,7 +233,12 @@ The UI was checked in a browser for each feature: login and guards, role-based r
 
 ## Deployment notes
 
-The project runs locally without any cloud services. One free-hosting setup:
+The project runs locally without any cloud services. It is also deployed:
+
+- **Live API:** https://gatewise-oxyx.onrender.com (health check: https://gatewise-oxyx.onrender.com/api/health)
+- **Live client:** _add the Vercel URL here after deploying_
+
+On Render's free tier the server sleeps when idle, so the first request after a quiet period can take about 50 seconds while it wakes up.
 
 **API on Render (web service)**
 - Root directory: `server`
@@ -246,14 +251,17 @@ The project runs locally without any cloud services. One free-hosting setup:
   - `PORT` is provided by Render.
 - `npm run build` compiles TypeScript and copies `src/data` to `dist/src/data`, which is where the compiled server reads and writes its JSON files.
 
-**Client on Vercel or Netlify**
-- Root directory: `client`
-- Build command: `npx ng build`
-- Output directory: `dist/client/browser`
-- Add an SPA rewrite so every path serves `index.html`:
-  - Vercel: a rewrite of `/(.*)` to `/index.html`
-  - Netlify: `/* /index.html 200` in `_redirects`
-- Before building, set `apiUrl` in `client/src/environments/environment.prod.ts` to the deployed API, e.g. `https://gatewise-api.onrender.com/api`.
+**Client on Vercel**
+- Root Directory: `client`
+- Framework Preset: Angular (or Other)
+- Install Command: `npm install`
+- Build Command: `npm run build`
+- Output Directory: `dist/client/browser`
+- `client/vercel.json` rewrites every path to `/index.html`, so deep links such as `/dashboard/records` work on reload. Static files are served first, so assets are unaffected.
+- The production build uses `client/src/environments/environment.prod.ts`, whose `apiUrl` is `https://gatewise-oxyx.onrender.com/api`.
+- After the first deploy, set `CLIENT_ORIGIN` on Render to the Vercel URL (e.g. `https://your-app.vercel.app`, no trailing slash) and redeploy the API. Until then the browser blocks API calls with a CORS error.
+
+On Netlify, use the same build settings and replace `vercel.json` with `/* /index.html 200` in a `_redirects` file.
 
 ## Known limitations
 
